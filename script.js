@@ -1,3 +1,23 @@
+const backgroundMusic = document.getElementById('backgroundMusic');
+let hasUserInteracted = false;
+
+const playBackgroundMusic = () => {
+    if (!backgroundMusic.paused) {
+        return;
+    }
+
+    backgroundMusic.play().then(() => {
+        hasUserInteracted = true;
+    }).catch(error => {
+        console.error('Error playing background music:', error);
+    });
+};
+
+const stopBackgroundMusic = () => {
+    backgroundMusic.pause();
+    backgroundMusic.currentTime = 0;
+};
+
 const selectors = {
     boardContainer: document.querySelector('.board-container'),
     board: document.querySelector('.board'),
@@ -7,7 +27,6 @@ const selectors = {
     win: document.querySelector('.win'),
     playAgainBtn: document.querySelector('.play-again-btn'),
     difficultySelect: document.getElementById('difficulty'),
-    
 };
 
 const state = {
@@ -72,10 +91,10 @@ const revealCardsBeforeStart = () => {
             revealTime = 1500; // 10 seconds
             break;
         case "6": // Medium level
-            revealTime = 2500; // 20 seconds
+            revealTime = 5000; // 20 seconds
             break;
         case "8": // Hard level
-            revealTime = 5000; // 40 seconds
+            revealTime = 10000; // 40 seconds
             break;
         default:
             revealTime = 1000; // Default to 1 second for other cases
@@ -94,7 +113,6 @@ const revealCardsBeforeStart = () => {
         startGame(); // Now, start the game
     }, revealTime);
 };
-
 
 const pickRandom = (array, items) => {
     const clonedArray = [...array];
@@ -131,6 +149,7 @@ const generateGame = () => {
     const parser = new DOMParser().parseFromString(cards, 'text/html');
     selectors.boardContainer.replaceChild(parser.querySelector('.board'), selectors.boardContainer.querySelector('.board'));
 };
+
 const hideReminderText = () => {
     const reminderText = document.getElementById('reminder-text');
     reminderText.classList.add('hidden');
@@ -140,13 +159,11 @@ const startGame = () => {
     state.gameStarted = true;
     selectors.start.classList.add('disabled');
 
-    hideReminderText(); // Call the function to hide the reminder text
-
+    hideReminderText();
     clearInterval(state.loop);
 
     state.loop = setInterval(() => {
         state.totalTime++;
-
         selectors.moves.innerText = `${state.totalFlips} moves`;
         selectors.timer.innerText = `Time: ${state.totalTime} sec`;
     }, 1000);
@@ -205,7 +222,6 @@ const flipCard = card => {
     }
 };
 
-
 // Add these functions to play success and fail audio
 const playSuccessAudio = () => {
     const successAudio = document.getElementById('success');
@@ -221,18 +237,19 @@ const playWinnerAudio = () => {
     const winnerAudio = document.getElementById('winner');
     winnerAudio.play();
 
-    // Display the confetti GIF when the player wins
     const confettiGif = document.querySelector('.confetti-gif');
     confettiGif.style.display = 'block';
+
+    stopBackgroundMusic(); // Add this line to play the background music when the player wins
 };
 
 const stopWinnerAudio = () => {
     const winnerAudio = document.getElementById('winner');
-    winnerAudio.pause(); // Pause the audio if it's playing
-
-    // Hide the confetti GIF
+    winnerAudio.pause();
     const confettiGif = document.querySelector('.confetti-gif');
     confettiGif.style.display = 'none';
+
+    playBackgroundMusic(); // Add this line to stop the background music when the game is stopped
 };
 
 const attachEventListeners = () => {
@@ -249,7 +266,6 @@ const attachEventListeners = () => {
 	}
     });
 
-
     document.addEventListener('click', event => {
         const eventTarget = event.target;
         const eventParent = eventTarget.parentElement;
@@ -262,7 +278,9 @@ const attachEventListeners = () => {
             startGame();
         } else if (eventTarget.className.includes('play-again-btn')) {
             playAgain();
-        }
+        } else if (!hasUserInteracted){
+	    playBackgroundMusic();
+	}
     });
 };
 

@@ -7,23 +7,46 @@
     <title>Game Memory</title>
     <link rel="stylesheet" href="style.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        h1, h4, h2, h3 {
+            font-family: 'Press Start 2P', cursive; /* Set the font to Press Start 2P */
+            text-align: center; /* Optional: Center the text */
+            margin: 20px 0; /* Optional: Add some margin for better spacing */
+            color: red; /* Replace #336699 with the color of your choice */
+            text-shadow: 2px 2px 2px #000000, 3px 3px 3px #000000, 4px 4px 4px #ffffff; /* Add a stylized 3D text effect */
+        }
+
         #reminder-text {
             display: block; /* Initially visible */
-            color: #000000; 
+            color: #ffffff;
             text-align: center;
-            
         }
+
         #reminder-text.hidden {
             display: none; /* Hide when the "hidden" class is applied */
         }
+
+        .emoji span {
+            display: inline-block;
+            color: transparent;
+            transition: color 0.5s ease-in-out;
+        }
+
+        .emoji .e { color: yellow; }
+        .emoji .m { color: blue; }
+        .emoji .o { color: red; }
+        .emoji .j { color: pink; }
+        .emoji .i { color: green; }
     </style>
 </head>
 <body>
     <div id="reminder-text">
-        <h1>CHOOSE A LEVEL OF DIFFICULTY BEFORE CLICKING THE START BUTTON</h1>
-        <h1>WELCOME TO MEMORY CARD GAME! EXERCISE YOUR MEMORY BY FLIPPING CARDS TO REVEAL PAIRS. MATCH ALL THE CARDS TO WIN. REMEMBER THEIR POSITIONS AND CONQUER THE CHALLENGE! GOOD LUCK!</h1>
-        
-
+        <h1>WELCOME TO <span class="emoji"><span class="e">E</span><span class="m">M</span><span class="o">O</span><span class="j">J</span><span class="i">I</span></span> MEMORY GAME!</h1>
+        <h3>EXERCISE YOUR MEMORY BY FLIPPING CARDS TO REVEAL PAIRS. MATCH ALL THE CARDS TO WIN. <br><br>
+            REMEMBER THEIR POSITIONS AND CONQUER THE CHALLENGE!</h3>
+        <h2>GOOD LUCK!</h2>
+        <h4>NOTE: Choose a level of difficulty before clicking the start button</h4>
     </div>
 
     <div class="game">
@@ -31,8 +54,8 @@
             <div>
                 <label for="difficulty">Select Difficulty</label>
                 <select id="difficulty">
-                    <option value="4"selected>EASY</option>
-                    <option value="6" >MEDUIM</option>
+                    <option value="4" selected>EASY</option>
+                    <option value="6">MEDIUM</option>
                     <option value="8">HARD</option>
                 </select>
             </div>
@@ -51,7 +74,11 @@
 
     <!-- Add an img element for the confetti GIF -->
     <img src="confetti.gif" alt="Confetti" class="confetti-gif" style="display: none">
-        
+
+    <audio id="backgroundMusic" autoplay loop>
+        <source src="backgroundMusic.mp3" preload="auto" type="audio/mp3">
+    </audio>
+    
     <audio id="success" src="success.mp3" preload="auto"></audio>
     <audio id="fail" src="fail.mp3" preload="auto"></audio>
     <audio id="winner" src="winner.mp3" preload="auto"></audio>
